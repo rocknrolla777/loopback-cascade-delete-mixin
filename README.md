@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/rocknrolla777/loopback-cascade-delete-mixin.svg?branch=master)](https://travis-ci.org/rocknrolla777/loopback-cascade-delete-mixin)
+
 # cascade-delete-mixin
 
 This module is designed for the [Strongloop Loopback](https://github.com/strongloop/loopback) framework. It provides cascade delete with a simple configuration on your models.
