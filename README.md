@@ -53,7 +53,8 @@ To use with your Models add the `mixins` attribute to the definition object of y
      },
     "mixins": {
       "CascadeDelete": {
-         "relations": ["properties", "description"]
+         "relations": ["properties", "description"],
+         "deepDelete": true
        }
     }
   }
@@ -64,10 +65,11 @@ To use with your Models add the `mixins` attribute to the definition object of y
 | option | type | description | required |
 | ------ | ---- | ----------- | -------- |
 |relations| [String] | relations which you want to delete together with current model | true |
+|deepDelete| [Boolean] | enable or disable the deep delete fonction. If activated, the CascadeDelete will be executed on the deleted related models as well (if they have the CascadeDelete mixin specified) | false |
 
 ## tests
 
-Run the tests: 
+Run the tests:
 ```bash
   npm test
 ```
@@ -76,8 +78,3 @@ Run with debugging output on:
 ```bash
   DEBUG='loopback:mixins:cascade-delete' npm test
 ```
-
-
-
-
-
