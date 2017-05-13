@@ -58,7 +58,17 @@ module.exports = function (Model, options) {
                 var where = {};
                 where[relationKey] = modelId;
 
-                return relationModel.destroyAll(where);
+                if (options.deepDelete && options.deepDelete == true) {
+                  return relationModel.find({where: where, fields: {id: true}}).then(function (instancesToDelete) {
+                    let deleteOperations = [];
+                    for (let instance of instancesToDelete) {
+                      deleteOperations.push(relationModel.deleteById(instance.id));
+                    }
+                    return Promise.all(deleteOperations);
+                  });
+                } else {
+                  return relationModel.destroyAll(where);
+                }
             }
         });
     }
