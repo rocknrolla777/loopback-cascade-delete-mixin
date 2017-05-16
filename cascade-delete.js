@@ -58,7 +58,7 @@ module.exports = function (Model, options) {
                 var where = {};
                 where[relationKey] = modelId;
 
-                if (options.deepDelete && options.deepDelete == true) {
+                if (options.deepDelete) {
                   return relationModel.find({where: where, fields: {id: true}}).then(function (instancesToDelete) {
                     let deleteOperations = [];
                     for (let instance of instancesToDelete) {
@@ -69,7 +69,7 @@ module.exports = function (Model, options) {
                 } else {
                   return relationModel.destroyAll(where);
                 }
-            }
+            };
         });
     }
 
