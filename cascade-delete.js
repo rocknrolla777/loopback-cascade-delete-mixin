@@ -59,10 +59,13 @@ module.exports = function (Model, options) {
                 where[relationKey] = modelId;
 
                 if (options.deepDelete) {
-                  return relationModel.find({where: where, fields: {id: true}}).then(function (instancesToDelete) {
+                  let relationModelIdName = relationModel.getIdName();
+                  let fields = {};
+                  fields[relationModelIdName] = true;
+                  return relationModel.find({where: where, fields: fields}).then(function (instancesToDelete) {
                     let deleteOperations = [];
                     for (let instance of instancesToDelete) {
-                      deleteOperations.push(relationModel.deleteById(instance.id));
+                      deleteOperations.push(relationModel.deleteById(instance[relationModelIdName]));
                     }
                     return Promise.all(deleteOperations);
                   });
