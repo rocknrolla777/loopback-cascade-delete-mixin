@@ -63,6 +63,7 @@
     "sinon-chai": "^2.14.0"
   },
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "debug": "^2.3.3"
   }
 }

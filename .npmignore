@@ -2,3 +2,4 @@ node_modules
 .git
 .idea/
 npm-debug.log
+src
