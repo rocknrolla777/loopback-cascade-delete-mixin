@@ -5,8 +5,8 @@ const debug = _debug();
 const idName = m => m.definition.idName() || 'id';
 const getIdValue = (m, data) => data && data[idName(m)];
 
-export default (Model, options) => {
-  const cascadeDeletes = modelId => Promise.all(options.relations.map(async (relation) => {
+const cascadeDeletes = (modelId, Model, options) =>
+  Promise.all(options.relations.map(async (relation) => {
     debug(`Relation ${relation} model ${Model.definition.name}`);
 
     if (!Model.relations[relation]) {
@@ -40,6 +40,7 @@ export default (Model, options) => {
     await relationModel.destroyAll(where);
   }));
 
+export default (Model, options) => {
   Model.observe('after delete', (ctx) => {
     const name = idName(Model);
     const hasInstanceId = ctx.instance && ctx.instance[name];
@@ -58,7 +59,7 @@ export default (Model, options) => {
 
     const modelInstanceId = getIdValue(Model, ctx.instance || ctx.where);
 
-    return cascadeDeletes(modelInstanceId)
+    return cascadeDeletes(modelInstanceId, Model, options)
       .then(() => {
         debug('Cascade delete has successfully finished');
         return true;
