@@ -1,6 +1,6 @@
 {
   "name": "loopback-cascade-delete-mixin",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Loopback cascade delete mixin",
   "main": "index.js",
   "directories": {
@@ -36,11 +36,11 @@
   },
   "homepage": "https://github.com/rocknrolla777/loopback-cascade-delete-mixin#readme",
   "devDependencies": {
-    "chai": "^3.5.0",
-    "debug": "^2.3.3",
-    "loopback": "^2.36.0",
-    "mocha": "^3.2.0",
-    "sinon": "^1.17.6",
+    "chai": "^4.1.2",
+    "debug": "^3.1.0",
+    "loopback": "^3.16.0",
+    "mocha": "^4.0.1",
+    "sinon": "^4.0.1",
     "sinon-chai": "^2.8.0"
   },
   "dependencies": {
