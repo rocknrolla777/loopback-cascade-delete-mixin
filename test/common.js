@@ -5,6 +5,7 @@ chai.use(require('sinon-chai'));
 
 global.loopback = require('loopback');
 
+
 // auto attach data sources to models
 // global.loopback.autoAttach();
 chai.config.includeStack = true;
