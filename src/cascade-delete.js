@@ -38,7 +38,6 @@ export default (Model, options) => {
     //   });
     // }
     await relationModel.destroyAll(where);
-    return true;
   }));
 
   Model.observe('after delete', (ctx) => {
