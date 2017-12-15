@@ -61,6 +61,31 @@ describe('Cascade Delete Mixin', () => {
                 done(err);
             });
         });
+
+        it('should delete related model --  Product (deep delete)', done => {
+            User.settings.mixins.CascadeDelete.deepDelete = true;
+            let user;
+            User.create({name: 'John User'})
+                .then(_user => {
+                    user = _user;
+                    sandbox.spy(user, 'destroy');
+                    return user.product.create({name: 'phone'});
+                }).then(() => {
+                return user.destroy();
+            })
+                .then(() => {
+                    expect(user.destroy).to.have.been.called;
+                    return Product.find()
+                })
+                .then(products => {
+                    expect(products).to.be.an('array').that.is.empty;
+                    done()
+                })
+                .catch(err => {
+                    done(err);
+                });
+        });
+
     });
 
     describe('hasOne', () => {
@@ -96,6 +121,30 @@ describe('Cascade Delete Mixin', () => {
                 done(err);
             });
         });
+        it('should delete related model --  Product (deep delete)', done => {
+            User.settings.mixins.CascadeDelete.deepDelete = true;
+            let user;
+
+            User.create({name: 'John User'})
+                .then(_user => {
+                    user = _user;
+                    sandbox.spy(user, 'destroy');
+                    return user.product.create({name: 'phone'});
+                }).then(() => {
+                return user.destroy();
+            })
+                .then(() => {
+                    expect(user.destroy).to.have.been.called;
+                    return Product.find()
+                })
+                .then(products => {
+                    expect(products).to.be.an('array').that.is.empty;
+                    done();
+                })
+                .catch(err => {
+                    done(err);
+                });
+        });
     });
 
     describe('hasMany', () => {
@@ -123,7 +172,7 @@ describe('Cascade Delete Mixin', () => {
                 .then(_user => {
                     user = _user;
                     sandbox.spy(user, 'destroy');
-                    return user.products.create({name: 'phone'});
+                    return Promise.all([user.products.create({name: 'phone'}), user.products.create({name: 'phone1'})]);
                 }).then(() => {
                 return user.purchases.create({name: 'purchase 1'})
             }).then(() => {
@@ -136,6 +185,34 @@ describe('Cascade Delete Mixin', () => {
             }).catch(err => {
                 done(err);
             });
+        });
+
+        it('should delete related models --  Product, Purchase (deep delete)', done => {
+            User.settings.mixins.CascadeDelete.deepDelete = true;
+            let user;
+
+            User.create({name: 'John User'})
+                .then(_user => {
+                    user = _user;
+                    sandbox.spy(user, 'destroy');
+                    return Promise.all([user.products.create({name: 'phone'}), user.products.create({name: 'phone1'})]);
+                }).then(() => {
+                return user.purchases.create({name: 'purchase 1'})
+            }).then(() => {
+                return user.destroy();
+            })
+                .then(() => {
+                    expect(user.destroy).to.have.been.called;
+                    return Promise.all([Product.find(), Purchase.find()]);
+                })
+                .then(([products, purchases]) => {
+                    expect(products).to.be.an('array').that.is.empty;
+                    expect(purchases).to.be.an('array').that.is.empty;
+                    done();
+                })
+                .catch(err => {
+                    done(err);
+                });
         });
     });
 
@@ -170,12 +247,36 @@ describe('Cascade Delete Mixin', () => {
                 }).then(category => {
                 return category.products.add(product);
             }).then(() => {
-                    sandbox.spy(product, 'destroy');
-                    return product.destroy();
-                })
+                sandbox.spy(product, 'destroy');
+                return product.destroy();
+            })
                 .then(() => {
                     expect(CategoryMapping.destroyAll).to.have.been.called;
                     expect(product.destroy).to.have.been.called;
+                    done();
+                })
+                .catch(err => done(err));
+        });
+
+        it('should delete through models -- CategoryMapping (deep delete)', done => {
+            let product;
+
+            Product.create({name: 'product1'})
+                .then(_product => {
+                    product = _product;
+                    return Category.create({name: 'category1'});
+                }).then(category => {
+                return category.products.add(product);
+            }).then(() => {
+                sandbox.spy(product, 'destroy');
+                return product.destroy();
+            })
+                .then(() => {
+                    expect(product.destroy).to.have.been.called;
+                    return CategoryMapping.find()
+                })
+                .then(cm => {
+                    expect(cm).to.be.an('array').that.is.empty;
                     done();
                 })
                 .catch(err => done(err));

@@ -1,13 +1,18 @@
 {
   "name": "loopback-cascade-delete-mixin",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Loopback cascade delete mixin",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha -R spec test"
+    "compile": "gulp babel",
+    "prepublish": "npm run compile",
+    "pretest": "eslint ./src/*.js --fix && gulp babel",
+    "test": "mocha -R spec test",
+    "outdated": "npm outdated --depth=0",
+    "watch": "gulp"
   },
   "repository": {
     "type": "git",
@@ -21,13 +26,16 @@
     "loopback-cascade-delete",
     "loopback",
     "delete",
-    "delete",
     "mixin",
     "relation",
     "mixin",
     "loopback",
     "relations",
-    "delete"
+    "delete",
+    "soft-delete",
+    "deep-delete",
+    "cascade mixin",
+    "delete mixin"
   ],
   "author": "Sergey Reus (reus.sergey14@gmail.com)",
   "license": "MIT",
@@ -36,14 +44,26 @@
   },
   "homepage": "https://github.com/rocknrolla777/loopback-cascade-delete-mixin#readme",
   "devDependencies": {
-    "chai": "^4.1.2",
-    "debug": "^3.1.0",
-    "loopback": "^3.16.0",
-    "mocha": "^4.0.1",
-    "sinon": "^4.0.1",
-    "sinon-chai": "^2.8.0"
+    "babel-core": "^6.26.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "chai": "^3.5.0",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-sourcemaps": "^2.6.1",
+    "loopback": "^3.15.0",
+    "mocha": "^3.5.3",
+    "sinon": "^1.17.7",
+    "sinon-chai": "^2.14.0"
   },
   "dependencies": {
-    "lodash": "^4.17.2"
+    "babel-runtime": "^6.26.0",
+    "debug": "^2.3.3"
   }
 }
