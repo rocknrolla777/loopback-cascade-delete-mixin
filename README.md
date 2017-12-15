@@ -11,6 +11,7 @@ This module is designed for the [Strongloop Loopback](https://github.com/strongl
 ```bash
   npm install --save loopback-cascade-delete-mixin
 ```
+Node.js v. > 6
 
 ## mixinsources
 
