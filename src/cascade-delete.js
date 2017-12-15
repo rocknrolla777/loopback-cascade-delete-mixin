@@ -25,19 +25,15 @@ const cascadeDeletes = (modelId, Model, options) =>
     const where = {};
     where[relationKey] = modelId;
 
-    // if (options.deepDelete) {
-    //   const relationModelIdName = relationModel.getIdName();
-    //   const fields = {};
-    //   fields[relationModelIdName] = true;
-    //   return relationModel.find({ where, fields }).then((instancesToDelete) => {
-    //     const deleteOperations = [];
-    //     for (const instance of instancesToDelete) {
-    //       deleteOperations.push(relationModel.deleteById(instance[relationModelIdName]));
-    //     }
-    //     return Promise.all(deleteOperations);
-    //   });
-    // }
-    await relationModel.destroyAll(where);
+    if (options.deepDelete) {
+      const instancesToDelete = await relationModel.find(where);
+
+      instancesToDelete.forEach(async (instance) => {
+        await instance.destroy();
+      });
+    } else {
+      await relationModel.destroyAll(where);
+    }
   }));
 
 export default (Model, options) => {

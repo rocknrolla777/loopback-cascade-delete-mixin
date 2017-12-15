@@ -123,7 +123,7 @@ describe('Cascade Delete Mixin', () => {
                 .then(_user => {
                     user = _user;
                     sandbox.spy(user, 'destroy');
-                    return user.products.create({name: 'phone'});
+                    return Promise.all([user.products.create({name: 'phone'}), user.products.create({name: 'phone1'})]);
                 }).then(() => {
                 return user.purchases.create({name: 'purchase 1'})
             }).then(() => {

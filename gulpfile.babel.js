@@ -1,6 +1,6 @@
 'use strict';
 
-import gulp from 'gulp';
+const gulp = require('gulp');
 import sourcemaps from 'gulp-sourcemaps';
 import babel from 'gulp-babel';
 import path from 'path';
