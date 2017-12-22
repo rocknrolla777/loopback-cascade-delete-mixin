@@ -26,7 +26,7 @@ const cascadeDeletes = (modelId, Model, options) =>
     where[relationKey] = modelId;
 
     if (options.deepDelete) {
-      const instancesToDelete = await relationModel.find(where);
+      const instancesToDelete = await relationModel.find({ where });
 
       instancesToDelete.forEach(async (instance) => {
         await instance.destroy();
