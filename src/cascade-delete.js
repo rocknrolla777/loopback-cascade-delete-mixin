@@ -16,11 +16,17 @@ const cascadeDeletes = (modelId, Model, options) =>
 
 
     let relationModel = Model.relations[relation].modelTo;
-    const relationKey = Model.relations[relation].keyTo;
+    let relationKey = Model.relations[relation].keyTo;
 
     if (Model.relations[relation].modelThrough) {
       relationModel = Model.relations[relation].modelThrough;
     }
+
+    try {
+      if (options.relationsConfig[relation].relationKey) {
+        relationKey = options.relationsConfig[relation].relationKey;
+      }
+    } catch (error) { }
 
     const where = {};
     where[relationKey] = modelId;

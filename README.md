@@ -56,9 +56,14 @@ To use with your Models add the `mixins` attribute to the definition object of y
      },
     "mixins": {
       "CascadeDelete": {
-         "relations": ["properties", "description"],
-         "deepDelete": true
-       }
+        "relations": ["properties", "description"],
+        "relationsConfig": {
+          "properties": {
+            "relationKey": "customForeignKey"
+          }
+        }
+        "deepDelete": true,
+      }
     }
   }
 ```
@@ -68,6 +73,7 @@ To use with your Models add the `mixins` attribute to the definition object of y
 | option | type | description | required |
 | ------ | ---- | ----------- | -------- |
 |relations| [String] | relations which you want to delete together with current model | true |
+|relationsConfig| [Object] | optionally define custom foreign keys for any relation to delete. Can be useful when using polymorphic relations | false |
 |deepDelete| [Boolean] | enable or disable the deep delete function. If activated, the CascadeDelete will be executed on the deleted related models as well (if they have the CascadeDelete mixin specified). If not used, disable it for performance matters | false |
 
 ## tests
