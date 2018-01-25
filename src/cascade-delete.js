@@ -23,10 +23,14 @@ const cascadeDeletes = (modelId, Model, options) =>
     }
 
     try {
-      if (options.relationsConfig[relation].relationKey) {
-        relationKey = options.relationsConfig[relation].relationKey;
+      const relationConfigKey = options.relationsConfig[relation].foreignKey;
+      if (relationConfigKey) {
+        relationKey = relationConfigKey;
+        debug(`Custom foreign key '${relationKey}' set for ${relation}.`);
       }
-    } catch (error) { }
+    } catch (error) {
+      debug(`No custom foreign key set for ${relation}.`);
+    }
 
     const where = {};
     where[relationKey] = modelId;

@@ -59,7 +59,7 @@ To use with your Models add the `mixins` attribute to the definition object of y
         "relations": ["properties", "description"],
         "relationsConfig": {
           "properties": {
-            "relationKey": "customForeignKey"
+            "foreignKey": "customForeignKey"
           }
         },
         "deepDelete": true,
