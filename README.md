@@ -61,7 +61,7 @@ To use with your Models add the `mixins` attribute to the definition object of y
           "properties": {
             "relationKey": "customForeignKey"
           }
-        }
+        },
         "deepDelete": true,
       }
     }
