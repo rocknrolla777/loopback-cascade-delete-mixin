@@ -16,10 +16,20 @@ const cascadeDeletes = (modelId, Model, options) =>
 
 
     let relationModel = Model.relations[relation].modelTo;
-    const relationKey = Model.relations[relation].keyTo;
+    let relationKey = Model.relations[relation].keyTo;
 
     if (Model.relations[relation].modelThrough) {
       relationModel = Model.relations[relation].modelThrough;
+    }
+
+    try {
+      const relationConfigKey = options.relationsConfig[relation].foreignKey;
+      if (relationConfigKey) {
+        relationKey = relationConfigKey;
+        debug(`Custom foreign key '${relationKey}' set for ${relation}.`);
+      }
+    } catch (error) {
+      debug(`No custom foreign key set for ${relation}.`);
     }
 
     const where = {};
