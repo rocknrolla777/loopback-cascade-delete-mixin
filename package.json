@@ -1,6 +1,6 @@
 {
   "name": "loopback-cascade-delete-mixin",
-  "version": "1.3.1",
+  "version": "2.0.0",
   "description": "Loopback cascade delete mixin",
   "main": "index.js",
   "directories": {

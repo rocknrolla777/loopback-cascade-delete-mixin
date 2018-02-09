@@ -6,7 +6,21 @@ const idName = m => m.definition.idName() || 'id';
 const getIdValue = (m, data) => data && data[idName(m)];
 
 const cascadeDeletes = (modelId, Model, options) =>
-  Promise.all(options.relations.map(async (relation) => {
+  Promise.all(options.relations.map(async (relationData) => {
+    let relation;
+    let relationForeignKey;
+    let relationDeepDelete;
+
+    if (relationData instanceof Object) {
+      relation = relationData.name;
+      relationForeignKey = relationData.foreignKey;
+      relationDeepDelete = relationData.deepDelete;
+    } else relation = relationData;
+
+    if (!relation) {
+      throw new Error('Please, set relation name! loopback-cascade-mixin');
+    }
+
     debug(`Relation ${relation} model ${Model.definition.name}`);
 
     if (!Model.relations[relation]) {
@@ -16,26 +30,23 @@ const cascadeDeletes = (modelId, Model, options) =>
 
 
     let relationModel = Model.relations[relation].modelTo;
-    let relationKey = Model.relations[relation].keyTo;
+    const relationKey = relationForeignKey || Model.relations[relation].keyTo;
 
     if (Model.relations[relation].modelThrough) {
       relationModel = Model.relations[relation].modelThrough;
     }
 
-    try {
-      const relationConfigKey = options.relationsConfig[relation].foreignKey;
-      if (relationConfigKey) {
-        relationKey = relationConfigKey;
-        debug(`Custom foreign key '${relationKey}' set for ${relation}.`);
-      }
-    } catch (error) {
-      debug(`No custom foreign key set for ${relation}.`);
+    if (!relationModel.definition.properties[relationKey]) {
+      throw new Error(`Bad relation key name! 
+      ${Model.definition.name} - ${relationModel.definition.name} 
+      loopback cascade-delete-mixin`);
     }
+
 
     const where = {};
     where[relationKey] = modelId;
 
-    if (options.deepDelete) {
+    if (relationDeepDelete || (relationDeepDelete && options.deepDelete)) {
       const instancesToDelete = await relationModel.find({ where });
 
       instancesToDelete.forEach(async (instance) => {

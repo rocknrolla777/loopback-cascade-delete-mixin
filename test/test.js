@@ -86,6 +86,52 @@ describe('Cascade Delete Mixin', () => {
                 });
         });
 
+        it ('should delete related model -- Product (object)', done => {
+            User.settings.mixins.CascadeDelete.relations =  [{name: 'product'}];
+            let user;
+            sandbox.spy(Product, 'destroyAll');
+            User.create({name: 'John User'})
+                .then(_user => {
+                    user = _user;
+                    sandbox.spy(user, 'destroy');
+                    return user.product.create({name: 'phone'});
+                }).then(() => {
+                return user.destroy();
+            }).then(() => {
+                expect(user.destroy).to.have.been.called;
+                expect(Product.destroyAll).to.have.been.called;
+                done();
+            }).catch(err => {
+                done(err);
+            });
+        });
+
+        it ('should delete related model -- Product (object, deep delete)', done => {
+            User.settings.mixins.CascadeDelete.relations =  [{name: 'product', deepDelete: true}];
+            let user;
+            User.create({name: 'John User'})
+                .then(_user => {
+                    user = _user;
+                    sandbox.spy(user, 'destroy');
+                    sandbox.spy(Product, 'destroyAll');
+                    return user.product.create({name: 'phone'});
+                }).then(() => {
+                return user.destroy();
+            })
+                .then(() => {
+                    expect(user.destroy).to.have.been.called;
+                    return Product.find()
+                })
+                .then(products => {
+                    expect(products).to.be.an('array').that.is.empty;
+                    expect(Product.destroyAll).not.to.have.been.called;
+                    done()
+                })
+                .catch(err => {
+                    done(err);
+                });
+        })
+
     });
 
     describe('hasOne', () => {
@@ -123,6 +169,52 @@ describe('Cascade Delete Mixin', () => {
         });
         it('should delete related model --  Product (deep delete)', done => {
             User.settings.mixins.CascadeDelete.deepDelete = true;
+            let user;
+
+            User.create({name: 'John User'})
+                .then(_user => {
+                    user = _user;
+                    sandbox.spy(user, 'destroy');
+                    return user.product.create({name: 'phone'});
+                }).then(() => {
+                return user.destroy();
+            })
+                .then(() => {
+                    expect(user.destroy).to.have.been.called;
+                    return Product.find()
+                })
+                .then(products => {
+                    expect(products).to.be.an('array').that.is.empty;
+                    done();
+                })
+                .catch(err => {
+                    done(err);
+                });
+        });
+
+        it('should delete related model --  Product (object)', done => {
+            User.settings.mixins.CascadeDelete.relations = [{name: 'product'}];
+            let user;
+            sandbox.spy(Product, 'destroyAll');
+            User.create({name: 'John User'})
+                .then(_user => {
+                    user = _user;
+                    sandbox.spy(user, 'destroy');
+                    return user.product.create({name: 'phone'});
+                }).then(() => {
+                return user.destroy();
+            }).then(() => {
+                expect(user.destroy).to.have.been.called;
+                expect(Product.destroyAll).to.have.been.called;
+                done();
+            }).catch(err => {
+                done(err);
+            });
+        });
+
+        it('should delete related model --  Product (object, deep delete)', done => {
+            User.settings.mixins.CascadeDelete.deepDelete = true;
+            User.settings.mixins.CascadeDelete.relations = [{name: 'product', deepDelete: true}];
             let user;
 
             User.create({name: 'John User'})
@@ -206,6 +298,61 @@ describe('Cascade Delete Mixin', () => {
                     return Promise.all([Product.find(), Purchase.find()]);
                 })
                 .then(([products, purchases]) => {
+                    expect(products).to.be.an('array').that.is.empty;
+                    expect(purchases).to.be.an('array').that.is.empty;
+                    done();
+                })
+                .catch(err => {
+                    done(err);
+                });
+        });
+
+        it('should delete related models --  Product, Purchase (object)', done => {
+            User.settings.mixins.CascadeDelete.relations = [{'name': 'products'}, 'purchases'];
+            let user;
+            sandbox.spy(Product, 'destroyAll');
+            sandbox.spy(Purchase, 'destroyAll');
+            User.create({name: 'John User'})
+                .then(_user => {
+                    user = _user;
+                    sandbox.spy(user, 'destroy');
+                    return Promise.all([user.products.create({name: 'phone'}), user.products.create({name: 'phone1'})]);
+                }).then(() => {
+                return user.purchases.create({name: 'purchase 1'})
+            }).then(() => {
+                return user.destroy();
+            }).then(() => {
+                expect(user.destroy).to.have.been.called;
+                expect(Product.destroyAll).to.have.been.called;
+                expect(Purchase.destroyAll).to.have.been.called;
+                done();
+            }).catch(err => {
+                done(err);
+            });
+        });
+
+        it('should delete related models --  Product, Purchase (object, deep delete)', done => {
+            User.settings.mixins.CascadeDelete.relations = [{'name': 'products', deepDelete: false}, 'purchases'];
+            User.settings.mixins.CascadeDelete.deepDelete = true;
+            let user;
+
+            User.create({name: 'John User'})
+                .then(_user => {
+                    user = _user;
+                    sandbox.spy(user, 'destroy');
+                    sandbox.spy(Product, 'destroyAll');
+                    return Promise.all([user.products.create({name: 'phone'}), user.products.create({name: 'phone1'})]);
+                }).then(() => {
+                return user.purchases.create({name: 'purchase 1'})
+            }).then(() => {
+                return user.destroy();
+            })
+                .then(() => {
+                    expect(user.destroy).to.have.been.called;
+                    return Promise.all([Product.find(), Purchase.find()]);
+                })
+                .then(([products, purchases]) => {
+                    expect(Product.destroyAll).to.have.been.called;
                     expect(products).to.be.an('array').that.is.empty;
                     expect(purchases).to.be.an('array').that.is.empty;
                     done();
