@@ -85,7 +85,7 @@ To use with your Models add the `mixins` attribute to the definition object of y
 | ------ | ---- | ----------- | -------- |
 |name| [String] | relation name | true |
 |deepDelete| [Boolean] | enable or disable the deep delete function for current relation. If activated, the CascadeDelete will be executed on the deleted related models as well (if they have the CascadeDelete mixin specified). If not used, disable it for performance matters | false |
-|foreignKey| [String] | custom foreign key | false
+|foreignKey| [String] | custom foreign key | false |
 
 ## tests
 
