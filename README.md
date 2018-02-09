@@ -60,7 +60,12 @@ To use with your Models add the `mixins` attribute to the definition object of y
           "type": "hasMany",
           "model": "Property",
           "foreignKey": ""
-        }
+        },
+        "description": {
+           "type": "hasMany",
+           "model": "Property",
+           "foreignKey": ""
+         }
      },
     "mixins": {
       "CascadeDelete": {
