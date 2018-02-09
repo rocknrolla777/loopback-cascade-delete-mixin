@@ -4,6 +4,14 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/rocknrolla777/loopback-cascade-delete-mixin.svg)](https://greenkeeper.io/)
 
+
+ ##### IMPORTANT! Mixin object structure is changed. If you use "relationsConfig" key, please use 1.3.1 version  
+```bash 
+npm install --save loopback-cascade-delete-mixin@1.3.1 
+```
+or change object structure!
+
+
 This module is designed for the [Strongloop Loopback](https://github.com/strongloop/loopback) framework. It provides cascade delete with a simple configuration on your models.
 
 ## install
@@ -56,12 +64,9 @@ To use with your Models add the `mixins` attribute to the definition object of y
      },
     "mixins": {
       "CascadeDelete": {
-        "relations": ["properties", "description"],
-        "relationsConfig": {
-          "properties": {
-            "foreignKey": "customForeignKey"
-          }
-        },
+        "relations": 
+        ["properties",
+        {"name": "description", "deepDelete": false}],
         "deepDelete": true,
       }
     }
@@ -72,9 +77,15 @@ To use with your Models add the `mixins` attribute to the definition object of y
 
 | option | type | description | required |
 | ------ | ---- | ----------- | -------- |
-|relations| [String] | relations which you want to delete together with current model | true |
-|relationsConfig| [Object] | optionally define custom foreign keys for any relation to delete. Can be useful when using polymorphic relations | false |
+|relations| [String] or [Object] | relations which you want to delete together with current model, see object keys below | true |
 |deepDelete| [Boolean] | enable or disable the deep delete function. If activated, the CascadeDelete will be executed on the deleted related models as well (if they have the CascadeDelete mixin specified). If not used, disable it for performance matters | false |
+
+**relations object** 
+| option | type | description | required |
+| ------ | ---- | ----------- | -------- |
+|name| [String] | relation name | true |
+|deepDelete| [Boolean] | enable or disable the deep delete function for current relation. If activated, the CascadeDelete will be executed on the deleted related models as well (if they have the CascadeDelete mixin specified). If not used, disable it for performance matters | false |
+|foreignKey| [String] | custom foreign key | false
 
 ## tests
 
