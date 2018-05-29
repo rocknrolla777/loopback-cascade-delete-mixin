@@ -57,7 +57,7 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-sourcemaps": "^2.6.1",
-    "loopback": "^3.15.0",
+    "loopback": "^3.19.2",
     "mocha": "^4.1.0",
     "sinon": "^4.1.4",
     "sinon-chai": "^2.14.0"
