@@ -59,7 +59,7 @@
     "gulp-sourcemaps": "^2.6.1",
     "loopback": "^3.15.0",
     "mocha": "^4.1.0",
-    "sinon": "^4.1.4",
+    "sinon": "^8.0.0",
     "sinon-chai": "^2.14.0"
   },
   "dependencies": {
